@@ -1,0 +1,25 @@
+meta {
+  name: text-prompt-context
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://demo-ai4industry.oto.tools:8080/test-prompt-context
+  body: json
+  auth: inherit
+}
+
+body:json {
+  [
+    {
+      "role": "user",
+      "content": "Tu es qui?"
+    }
+  ]
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

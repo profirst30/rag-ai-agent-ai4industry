@@ -1,0 +1,8 @@
+# Fichiers JAR volumineux (trop grands pour GitHub)
+*.jar
+
+# Logs
+logs/
+
+# Fichiers de base de données locaux
+# filedb/

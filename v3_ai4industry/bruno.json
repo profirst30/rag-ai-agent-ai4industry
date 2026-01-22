@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "v3_ai4industry",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

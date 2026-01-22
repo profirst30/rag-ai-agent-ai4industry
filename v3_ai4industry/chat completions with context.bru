@@ -1,0 +1,27 @@
+meta {
+  name: chat completions with context
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://demo-ai4industry.oto.tools:8080/v2/chat/completions
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "qui es tu?"
+      }
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

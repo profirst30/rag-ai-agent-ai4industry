@@ -1,0 +1,27 @@
+meta {
+  name: simple chat completion
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://demo-ai4industry.oto.tools:8080/v1/chat/completions
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "raconte moi une blague !"
+      }
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
