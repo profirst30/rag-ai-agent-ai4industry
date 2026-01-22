@@ -12,11 +12,6 @@ PDFS_DIR = "data/pdfs"
 JSON_DIR = "data/json"
 INDEX_DIR = "data/index"
 
-# === PARAMÈTRES HARDCODÉS ===
-RISQUE_PAR_DEFAUT = "inondation"  # Modifiez selon vos besoins
-VILLE_PAR_DEFAUT = None  # Laissez None pour mode général
-CODE_DEPT_PAR_DEFAUT = "86"  # Code du département à traiter
-
 
 def get_code_dept(filename):
     """Extrait le code departement"""
@@ -28,19 +23,18 @@ def get_code_dept(filename):
 def process_all():
     """Traite tous les PDFs"""
     print("\n" + "=" * 70)
-    print("TRAITEMENT DES PDFs")
+    print("TRAITEMENT")
     print("=" * 70)
 
     for d in [PDFS_DIR, JSON_DIR, INDEX_DIR]:
         os.makedirs(d, exist_ok=True)
 
     pdfs = [f for f in os.listdir(PDFS_DIR) if f.endswith('.pdf')] if os.path.exists(PDFS_DIR) else []
-
     if not pdfs:
-        print("Aucun PDF trouvé")
+        print("Aucun PDF")
         return
 
-    print(f"\n{len(pdfs)} PDF(s) trouvé(s)")
+    print(f"\n{len(pdfs)} PDF(s)")
 
     for idx, pdf_file in enumerate(pdfs, 1):
         print(f"\n[{idx}/{len(pdfs)}] {pdf_file}")
@@ -48,7 +42,7 @@ def process_all():
 
         code = get_code_dept(pdf_file)
         if not code:
-            print("  ERREUR: Code département introuvable")
+            print("  ERREUR: Code introuvable")
             continue
 
         pdf_path = os.path.join(PDFS_DIR, pdf_file)
@@ -57,75 +51,104 @@ def process_all():
 
         # Logique automatique
         if os.path.exists(index_path):
-            print("  [OK] Index déjà prêt")
+            print("  OK Index pret")
             continue
 
         if os.path.exists(json_path):
-            print("  [OK] JSON existe déjà")
+            print("  OK JSON existe")
             try:
                 build_index(json_path, code, index_path)
-                print("  [OK] Index créé")
             except Exception as e:
-                print(f"  [ERREUR] : {e}")
+                print(f"  ERREUR: {e}")
             continue
 
         # Tout faire
         try:
-            print("  >> Extraction PDF...")
             extract_pdf(pdf_path, json_path)
-            print("  >> Création index...")
             build_index(json_path, code, index_path)
-            print("  [OK] Terminé")
         except Exception as e:
-            print(f"  [ERREUR] : {e}")
+            print(f"  ERREUR: {e}")
 
     print(f"\n{'=' * 70}")
-    print("TRAITEMENT TERMINÉ")
+    print("TERMINE")
     print("=" * 70)
 
 
-def generer_contexte_automatique():
-    """
-    Génère automatiquement le contexte RAG avec les paramètres hardcodés
-    """
+def mode_interactif():
+    """Mode interactif"""
     print("\n" + "=" * 70)
-    print("GÉNÉRATION DU CONTEXTE RAG")
+    print("MODE INTERACTIF")
     print("=" * 70)
 
-    # Vérifier que l'index existe
-    index_path = os.path.join(INDEX_DIR, f"{CODE_DEPT_PAR_DEFAUT}.json")
+    if not os.path.exists(INDEX_DIR):
+        print("Aucun index")
+        return
 
-    if not os.path.exists(index_path):
-        print(f"[ERREUR] : Index introuvable pour le département {CODE_DEPT_PAR_DEFAUT}")
-        print(f"   Chemin attendu: {index_path}")
-        return None
+    indexes = [f.replace('.json', '') for f in os.listdir(INDEX_DIR) if f.endswith('.json')]
+    if not indexes:
+        print("Aucun departement")
+        return
 
-    # Afficher les paramètres
-    print(f"\n* Département: {CODE_DEPT_PAR_DEFAUT}")
-    print(f"* Risque: {RISQUE_PAR_DEFAUT}")
-    print(f"* Ville: {VILLE_PAR_DEFAUT if VILLE_PAR_DEFAUT else 'Mode général'}")
-    print("-" * 70)
+    print(f"Departements : {', '.join(indexes)}")
 
-    # Générer le prompt
-    try:
-        result = generer_prompt(index_path, RISQUE_PAR_DEFAUT, VILLE_PAR_DEFAUT)
-        print("\n[OK] CONTEXTE GÉNÉRÉ:")
-        print("=" * 70)
+    while True:
+        print("\n" + "-" * 70)
+
+        code = input("Code (q=quitter) : ").strip()
+        if code.lower() == 'q':
+            break
+
+        index_path = os.path.join(INDEX_DIR, f"{code}.json")
+        if not os.path.exists(index_path):
+            print(f"Introuvable : {code}")
+            continue
+
+        print("\n1. GENERALE")
+        print("2. LOCALE")
+        choix = input("Choix : ").strip()
+
+        ville = None
+        risque = None
+
+        if choix == '1':
+            risque = input("Risque : ").strip()
+        elif choix == '2':
+            ville = input("Ville : ").strip()
+            risque = input("Risque : ").strip()
+        else:
+            continue
+
+        if not risque:
+            continue
+
+        print(f"\n{'=' * 70}")
+        result = generer_prompt(index_path, risque, ville)
         print(result)
-        print("=" * 70)
-        return result
-    except Exception as e:
-        print(f"[ERREUR] lors de la génération: {e}")
-        return None
+        print(f"{'=' * 70}\n")
 
 
 def main():
-    """Point d'entrée"""
-    # Étape 1: Traiter tous les PDFs
+    """Point d'entree"""
     process_all()
 
-    # Étape 2: Générer le contexte automatiquement
-    generer_contexte_automatique()
+    if len(sys.argv) >= 3:
+        code = sys.argv[1]
+        index_path = os.path.join(INDEX_DIR, f"{code}.json")
+
+        if not os.path.exists(index_path):
+            print(f"Index introuvable : {code}")
+            return
+
+        if len(sys.argv) == 3:
+            # Generale
+            result = generer_prompt(index_path, sys.argv[2])
+        else:
+            # Locale
+            result = generer_prompt(index_path, sys.argv[3], sys.argv[2])
+
+        print(result)
+    else:
+        mode_interactif()
 
 
 if __name__ == "__main__":

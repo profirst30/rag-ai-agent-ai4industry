@@ -1,0 +1,114 @@
+========================================================================
+GENERATEUR DE CONTEXTE RAG STRUCTURE (SANS EMBEDDINGS)
+========================================================================
+
+Ce projet est une alternative "deterministe" au RAG (Retrieval-Augmented Generation)
+classique. Il est concu specifiquement pour les documents administratifs longs
+et structures type DDRM (Dossier Departemental sur les Risques Majeurs).
+
+1. PHILOSOPHIE : POURQUOI PAS D'EMBEDDINGS ?
+------------------------------------------------------------------------
+Le RAG classique decoupe le texte en morceaux et utilise la similarite
+semantique (vecteurs) pour trouver l'information.
+
+PROBLEME DU RAG CLASSIQUE SUR CES DOCUMENTS :
+1. Confusion Geographique : Si on cherche "Risque a Poitiers", les vecteurs
+   peuvent remonter des paragraphes sur "Chatellerault" car le contexte
+   semantique est tres proche (meme riviere, meme type de crue).
+2. Perte de Structure : Le lien entre un titre (ex: "Mesures de securite")
+   et un paragraphe situe 3 pages plus loin est souvent perdu.
+
+NOTRE SOLUTION (APPROCHE SYMBOLIQUE) :
+Au lieu de deviner la probabilite qu'un texte soit pertinent, nous utilisons
+la structure stricte du document :
+- Si le mot "Poitiers" est present -> C'est pertinent pour Poitiers.
+- Si le paragraphe est sous le titre "Inondation" -> C'est du risque Inondation.
+
+C'est une approche "Chirurgicale" : 0% d'hallucination sur la localisation.
+
+2. COMMENT CA MARCHE (ARCHITECTURE TECHNIQUE)
+------------------------------------------------------------------------
+Le pipeline se decompose en 3 etapes logiques :
+
+ETAPE A : EXTRACTION ARBORESCENTE (extract.py)
+----------------------------------------------
+Outil : Docling
+Objectif : Ne pas sortir du "texte plat", mais un "Arbre JSON".
+Processus :
+- Le script detecte les TITRES et leur niveau hierarchique.
+- Il rattache chaque paragraphe a son parent.
+- Il preserve les tableaux en format structure.
+Resultat : Un fichier JSON qui ressemble a la table des matieres du PDF.
+
+ETAPE B : INDEXATION INTELLIGENTE (indexer.py)
+----------------------------------------------
+Outil : Algorithme de scan recursif + API Gouv
+Objectif : Transformer l'arbre en base de donnees consultable.
+Processus :
+1. Recuperation des communes : Interroge l'API Gouv pour connaitre toutes
+   les villes du departement (ex: 86 -> Poitiers, Chauvigny...).
+2. Scan Vertical : Le script lit le document de haut en bas.
+   - Il retient le contexte (ex: "Je suis dans la section INONDATION").
+3. Tagging : Si un paragraphe contient le nom d'une commune, il est
+   immediatement copie dans l'index de cette commune, avec le tag du risque
+   courant.
+4. Fusion : Si plusieurs paragraphes consecutifs parlent de la meme chose,
+   ils sont fusionnes pour eviter de donner des phrases hachees a l'IA.
+
+ETAPE C : REQUETE INSTANTANEE (query.py)
+----------------------------------------
+Outil : Dictionnaire Python (Hash Map)
+Processus :
+- Pas de calcul vectoriel, pas de GPU.
+- La recherche est une simple lecture de cle : Index["Poitiers"]["Inondation"].
+- Temps de reponse : < 0.01 seconde.
+
+3. ORCHESTRATION INTELLIGENTE (main.py)
+------------------------------------------------------------------------
+Le script `main.py` est le chef d'orchestre. Il est concu pour GAGNER DU TEMPS.
+L'extraction PDF etant lente, le script verifie l'etat d'avancement avant
+d'agir. Il suit cette logique stricte pour chaque fichier :
+
+CAS 1 : TOUT EST FINI (Index present)
+- Verification : Le fichier `data/index/86.json` existe-t-il ?
+- Action : OUI -> Le script ne fait rien. Il passe au suivant. (0 sec)
+
+CAS 2 : EXTRACTION DEJA FAITE (JSON present)
+- Verification : L'index n'est pas la, mais `data/json/86.json` existe ?
+- Action : OUI -> Le script SAUTE l'extraction PDF (etape lourde).
+           Il lance uniquement l'indexation (etape rapide).
+
+CAS 3 : RIEN N'EST FAIT
+- Action : Il lance `extract_pdf` (Lent) PUIS `build_index`.
+
+4. EMPLACEMENT DES FICHIERS
+------------------------------------------------------------------------
+- Placez vos PDF dans : data/pdfs/
+- Les JSON intermediaires iront dans : data/json/
+- Les Index finaux iront dans : data/index/
+
+!!! IMPORTANT : NOMMAGE DES FICHIERS !!!
+Le script doit deviner le code departement.
+Le nom du PDF doit contenir le numero.
+- BON : ddrm_86.pdf
+- MAUVAIS : ddrm_vienne.pdf
+
+5. UTILISATION
+------------------------------------------------------------------------
+Installation des dependances :
+pip install requests docling
+
+A) Lancement (Mode Interactif - Recommande) :
+python main.py
+-> Le script traite les nouveaux PDFs manquants.
+-> Il ouvre ensuite un menu pour choisir le departement, la ville et le risque.
+
+B) Lancement (Mode Commande - Automatisation) :
+python main.py 86 "Poitiers" "Inondation"
+
+6. RESUME DES AVANTAGES
+------------------------------------------------------------------------
+- Precision (pas de melange de villes).
+- Pas de base de donnees vectorielle .
+- Tres rapide .
+- Portable (tout tient dans des fichiers JSON).
