@@ -3,6 +3,13 @@
 
 # Logs
 logs/
+*.log
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.venv/
 
 # Fichiers de base de données locaux
 # filedb/

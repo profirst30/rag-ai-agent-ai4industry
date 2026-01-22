@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Groupe 3 - Otoroshi</title>
+    <title>RAG DDRM - DICRIM Assistant</title>
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #1a1a1a; color: white; margin: 0; display: flex; justify-content: center; height: 100vh; }
         .chat-container { width: 100%; max-width: 600px; background: #2d2d2d; display: flex; flex-direction: column; height: 100%; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
@@ -27,9 +27,9 @@
 <body>
 
 <div class="chat-container">
-    <div class="header">IA Groupe 3 (Via Otoroshi)</div>
+    <div class="header">Assistant DDRM → DICRIM</div>
     <div id="messages">
-        <div class="message bot">Bonjour ! Je suis connecté via Otoroshi. Pose-moi une question !</div>
+        <div class="message bot">Bonjour ! Je suis l'assistant DDRM-DICRIM. Posez-moi une question sur les risques majeurs (inondation, séisme, etc.) !</div>
     </div>
 
     <form class="input-area" id="chatForm">
@@ -45,9 +45,7 @@
     const sendBtn = document.getElementById('sendBtn');
 
 
-    const API_URL = 'http://ai4industry.oto.tools:8080/v1/chat/completions';
-
-    const API_KEY = 'Bearer otoapk_w2np3b9v9zxvr659_7daf5d6ffd4fa0c3b4a78c1290301975275f3549538cf436332b6f6d6b85e397';
+    const API_URL = 'http://localhost:8000/rag/query';
 
     function addMessage(text, sender) {
         const div = document.createElement('div');
@@ -74,8 +72,7 @@
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': API_KEY
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     messages: [
