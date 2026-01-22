@@ -1,7 +1,7 @@
 # Projet GROUPE 3 
 
 Cette version utilise otoroshi avec le systeme de tool et des json générer sans Embedding. 
-Le json sont mis directement dans la definition du tool (méthode directe utilisée par manque de temps dans le cas ou un piste plus élaboré ne fonctionner pas cf. branch nobel_version).
+Les json sont mis directement dans la definition du tool (méthode directe utilisée par manque de temps dans le cas ou une piste plus élaboré ne fonctionner pas cf. branch nobel_version).
 
 ### Télécharger 
 
@@ -15,6 +15,11 @@ https://github.com/cloud-apim/otoroshi-llm-extension/releases
 ```
 Ajouter la .jar a la racine du projet puis lancer. 
 ### Lancer 
+
+Renommer les .jar sans les versions 
+nom des jar : 
+- otoroshi.jar
+- 
 #### Pour windows 
 ```bash
 java -cp "otoroshi-llm-extension.jar;otoroshi.jar" -Dotoroshi.adminLogin=admin -Dotoroshi.adminPassword=password -Dotoroshi.storage=file play.core.server.ProdServerStart
