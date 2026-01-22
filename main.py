@@ -57,27 +57,27 @@ def process_all():
 
         # Logique automatique
         if os.path.exists(index_path):
-            print("  ✅ Index déjà prêt")
+            print("  [OK] Index déjà prêt")
             continue
 
         if os.path.exists(json_path):
-            print("  ✅ JSON existe déjà")
+            print("  [OK] JSON existe déjà")
             try:
                 build_index(json_path, code, index_path)
-                print("  ✅ Index créé")
+                print("  [OK] Index créé")
             except Exception as e:
-                print(f"  ❌ ERREUR: {e}")
+                print(f"  [ERREUR] : {e}")
             continue
 
         # Tout faire
         try:
-            print("  🔄 Extraction PDF...")
+            print("  >> Extraction PDF...")
             extract_pdf(pdf_path, json_path)
-            print("  🔄 Création index...")
+            print("  >> Création index...")
             build_index(json_path, code, index_path)
-            print("  ✅ Terminé")
+            print("  [OK] Terminé")
         except Exception as e:
-            print(f"  ❌ ERREUR: {e}")
+            print(f"  [ERREUR] : {e}")
 
     print(f"\n{'=' * 70}")
     print("TRAITEMENT TERMINÉ")
@@ -96,26 +96,26 @@ def generer_contexte_automatique():
     index_path = os.path.join(INDEX_DIR, f"{CODE_DEPT_PAR_DEFAUT}.json")
 
     if not os.path.exists(index_path):
-        print(f"❌ ERREUR: Index introuvable pour le département {CODE_DEPT_PAR_DEFAUT}")
+        print(f"[ERREUR] : Index introuvable pour le département {CODE_DEPT_PAR_DEFAUT}")
         print(f"   Chemin attendu: {index_path}")
         return None
 
     # Afficher les paramètres
-    print(f"\n📍 Département: {CODE_DEPT_PAR_DEFAUT}")
-    print(f"⚠️  Risque: {RISQUE_PAR_DEFAUT}")
-    print(f"🏘️  Ville: {VILLE_PAR_DEFAUT if VILLE_PAR_DEFAUT else 'Mode général'}")
+    print(f"\n* Département: {CODE_DEPT_PAR_DEFAUT}")
+    print(f"* Risque: {RISQUE_PAR_DEFAUT}")
+    print(f"* Ville: {VILLE_PAR_DEFAUT if VILLE_PAR_DEFAUT else 'Mode général'}")
     print("-" * 70)
 
     # Générer le prompt
     try:
         result = generer_prompt(index_path, RISQUE_PAR_DEFAUT, VILLE_PAR_DEFAUT)
-        print("\n✅ CONTEXTE GÉNÉRÉ:")
+        print("\n[OK] CONTEXTE GÉNÉRÉ:")
         print("=" * 70)
         print(result)
         print("=" * 70)
         return result
     except Exception as e:
-        print(f"❌ ERREUR lors de la génération: {e}")
+        print(f"[ERREUR] lors de la génération: {e}")
         return None
 
 
