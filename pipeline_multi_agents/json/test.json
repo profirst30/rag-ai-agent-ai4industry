@@ -1,0 +1,180 @@
+{
+  "departement": "79",
+  "source_document": "DDRM_79.pdf",
+  "communes": {
+    "Le Tallud": {
+      "1100000": {
+        "nom_risque": "Inondation",
+        "code_risque": "1100000",
+        "description": "Le Tallud est situé en zone inondable du bassin de la Sèvre Niortaise. Les crues peuvent atteindre des hauteurs de 2 à 3 mètres dans les zones basses. Le risque est classé modéré selon le PPRI approuvé en 2018.",
+        "consignes": {
+          "avant": [
+            "Identifiez les zones à risque dans votre habitation et préparez un kit d'urgence avec eau, médicaments et documents importants",
+            "Repérez les points hauts où vous réfugier et les itinéraires d'évacuation",
+            "Inscrivez-vous au système d'alerte de la commune pour recevoir les notifications en temps réel",
+            "Assurez vos biens et conservez les preuves photographiques"
+          ],
+          "pendant": [
+            "Rejoignez les étages supérieurs sans tenter de récupérer des objets au rez-de-chaussée",
+            "Coupez l'électricité, le gaz et le chauffage avant l'arrivée de l'eau",
+            "Ne traversez jamais une zone inondée à pied ou en voiture - 30 cm d'eau suffisent à emporter un véhicule",
+            "Restez à l'écoute de France Bleu Poitou et des consignes des autorités",
+            "Signalez votre présence en attendant les secours"
+          ],
+          "apres": [
+            "N'entrez pas dans un bâtiment endommagé sans l'avis d'un expert",
+            "Faites vérifier les installations électriques et de gaz par un professionnel avant remise en service",
+            "Aérez et désinfectez les pièces inondées pour éviter les moisissures",
+            "Photographiez les dégâts pour votre déclaration d'assurance",
+            "Ne consommez pas l'eau du robinet tant qu'elle n'a pas été déclarée potable par l'ARS"
+          ]
+        },
+        "arretes_catnat": [
+          {
+            "date": "28/02/2010",
+            "type_catastrophe": "Inondations et coulées de boue",
+            "reference_jo": "JO du 16/03/2010"
+          },
+          {
+            "date": "01/12/1999",
+            "type_catastrophe": "Inondations par débordement de la Sèvre",
+            "reference_jo": "JO du 29/12/1999"
+          }
+        ],
+        "icpe": [],
+        "cartes": [
+          "3A",
+          "7B"
+        ],
+        "informations_complementaires": "Mairie: 05.49.XX.XX.XX | Préfecture 79: 05.49.XX.XX.XX | Carte des zones inondables consultable en mairie"
+      },
+      "1300000": {
+        "nom_risque": "Séisme",
+        "code_risque": "1300000",
+        "description": "Le Tallud est situé en zone de sismicité modérée (zone 3 selon le zonage réglementaire). Les constructions neuves doivent respecter les normes parasismiques Eurocode 8. Le dernier séisme ressenti date de 2016 avec une magnitude de 4.2.",
+        "consignes": {
+          "avant": [
+            "Fixez solidement les meubles hauts et les éléments lourds susceptibles de basculer",
+            "Repérez les endroits sûrs dans chaque pièce: sous une table robuste, dans l'encadrement d'une porte porteuse",
+            "Préparez un sac d'évacuation avec lampe, radio, eau et médicaments",
+            "Effectuez des exercices de mise à l'abri avec votre famille"
+          ],
+          "pendant": [
+            "Mettez-vous à l'abri sous un meuble solide en protégeant votre tête",
+            "Éloignez-vous des fenêtres, miroirs et objets pouvant se briser ou tomber",
+            "Si vous êtes à l'extérieur, éloignez-vous des bâtiments, arbres et lignes électriques",
+            "Ne prenez pas les ascenseurs et ne sortez pas du bâtiment pendant les secousses",
+            "En voiture, arrêtez-vous prudemment à distance des ponts et infrastructures"
+          ],
+          "apres": [
+            "Vérifiez l'état de votre habitation avant d'y retourner - ne rentrez pas si des fissures importantes sont visibles",
+            "Coupez l'électricité et le gaz si vous sentez une odeur suspecte",
+            "Attendez-vous à des répliques et appliquez les mêmes consignes de protection",
+            "Écoutez la radio pour connaître les consignes des autorités",
+            "Ne téléphonez qu'en cas d'urgence vitale pour ne pas saturer les réseaux"
+          ]
+        },
+        "arretes_catnat": [],
+        "icpe": [],
+        "cartes": [
+          "12"
+        ],
+        "informations_complementaires": "Zonage sismique: www.planseisme.fr | Centre Sismologique France-Méditerranée: http://renass.unistra.fr"
+      },
+      "2400000": {
+        "nom_risque": "Transport De Matières Dangereuses",
+        "code_risque": "2400000",
+        "description": "La commune est traversée par la RN11 et une voie ferrée classées axes TMD. Les produits transportés incluent hydrocarbures, gaz liquéfiés et produits chimiques industriels. Un Plan Particulier d'Intervention (PPI) couvre le territoire communal.",
+        "consignes": {
+          "avant": [
+            "Identifiez les axes de transport de matières dangereuses proches de votre domicile",
+            "Familiarisez-vous avec le signal national d'alerte (sirène)",
+            "Préparez du matériel de confinement: ruban adhésif, chiffons pour calfeutrer les ouvertures"
+          ],
+          "pendant": [
+            "Rejoignez le bâtiment le plus proche et confinez-vous à l'intérieur",
+            "Fermez portes, fenêtres et bouches d'aération - calfeutrez avec du tissu humide si nuage toxique",
+            "Arrêtez la ventilation et le chauffage",
+            "N'allez pas chercher vos enfants à l'école - ils sont pris en charge et confinés sur place",
+            "Écoutez la radio et respectez les consignes des secours - ne téléphonez pas"
+          ],
+          "apres": [
+            "Aérez dès que les autorités donnent l'autorisation",
+            "Si vous avez été exposé aux produits chimiques, retirez vos vêtements et lavez-vous abondamment",
+            "Consultez un médecin si vous présentez des symptômes: irritations, nausées, difficultés respiratoires",
+            "Ne consommez aucun produit du jardin potentiellement contaminé sans analyse préalable"
+          ]
+        },
+        "arretes_catnat": [],
+        "icpe": [
+          {
+            "nom_etablissement": "Dépôt pétrolier TOTAL",
+            "regime": "Autorisation avec servitudes (AS)",
+            "activite": "Stockage de liquides inflammables - 2630"
+          },
+          {
+            "nom_etablissement": "Station-service AVIA",
+            "regime": "Enregistrement",
+            "activite": "Distribution de carburants - 1435"
+          }
+        ],
+        "cartes": [
+          "15A"
+        ],
+        "informations_complementaires": "N° d'urgence TMD: 112 | Préfecture (cellule de crise): 05.49.XX.XX.XX | Axes concernés: RN11, Ligne SNCF Niort-Bordeaux"
+      }
+    },
+    "Niort": {
+      "1100000": {
+        "nom_risque": "Inondation",
+        "code_risque": "1100000",
+        "description": "Niort est concernée par les débordements de la Sèvre Niortaise avec un risque fort identifié dans le PPRI. Les quartiers historiques du centre-ville et les zones du Marais Poitevin sont particulièrement exposés. Plus de 1200 habitations en zone rouge.",
+        "consignes": {
+          "avant": [
+            "Consultez la carte du PPRI disponible en mairie pour connaître votre niveau d'exposition",
+            "Aménagez votre habitation: rehaussement des équipements électriques, installation de batardeaux",
+            "Souscrivez une assurance couvrant le risque inondation et conservez un inventaire de vos biens",
+            "Préparez un plan d'évacuation familial avec point de ralliement hors zone inondable"
+          ],
+          "pendant": [
+            "Évacuez immédiatement si vous êtes en zone rouge et que l'ordre est donné par la mairie",
+            "Montez aux étages supérieurs avec vos documents importants et votre kit d'urgence",
+            "Ne tentez jamais de traverser une rue inondée - le courant est plus fort qu'il n'y paraît",
+            "Coupez électricité et gaz dès les premières alertes",
+            "Suivez les instructions de Radio France Bleu Poitou (87.6 FM)"
+          ],
+          "apres": [
+            "Attendez l'autorisation officielle avant de réintégrer votre logement",
+            "Prenez des photos des dégâts avant tout nettoyage pour votre assurance",
+            "Faites contrôler vos installations par des professionnels certifiés",
+            "Participez aux réunions publiques post-crue organisées par la ville"
+          ]
+        },
+        "arretes_catnat": [
+          {
+            "date": "01/12/1999",
+            "type_catastrophe": "Inondations - Crue centennale de la Sèvre",
+            "reference_jo": "JO du 29/12/1999"
+          },
+          {
+            "date": "28/02/2010",
+            "type_catastrophe": "Inondations et coulées de boue",
+            "reference_jo": "JO du 16/03/2010"
+          },
+          {
+            "date": "15/01/1982",
+            "type_catastrophe": "Inondations",
+            "reference_jo": "JO du 05/02/1982"
+          }
+        ],
+        "icpe": [],
+        "cartes": [
+          "3A",
+          "3B",
+          "4"
+        ],
+        "informations_complementaires": "Mairie de Niort: 05.49.78.XX.XX | Vigicrues: www.vigicrues.gouv.fr | Application mobile: Niort Alerte disponible sur iOS et Android"
+      }
+    }
+  }
+}
