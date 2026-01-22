@@ -68,7 +68,7 @@ def process_pdf_local(
                 model=embed_model_id,
                 prompt=text,
                 options={
-                    "num_ctx": 4096, # On augmente la fenêtre de contexte (ex: 4k ou 8k)
+                    "num_ctx": 4096, # On augmente la fenêtre de contexte
                     "temperature": 0  # Recommandé pour les embeddings
                 }
             )
@@ -81,11 +81,11 @@ def process_pdf_local(
             })
 
         except Exception as e:
-            logger.error(f"❌ Erreur sur le chunk {i} (longueur: {len(text)} car.) : {e}")
+            logger.error(f"Erreur sur le chunk {i} (longueur: {len(text)} car.) : {e}")
             # On ignore ce chunk problématique et on continue
             continue
 
-    logger.info(f"✅ {len(valid_documents)} / {len(chunks_text)} documents traités avec succès.")
+    logger.info(f"{len(valid_documents)} / {len(chunks_text)} documents traités avec succès.")
     return valid_documents
 
 def save_results(documents: List[Dict], output_path: str):
@@ -99,7 +99,7 @@ def save_results(documents: List[Dict], output_path: str):
     }
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
-    logger.info(f"✓ Base de connaissances sauvegardée : {output_path}")
+    logger.info(f"Base de connaissances sauvegardée : {output_path}")
 
 if __name__ == "__main__":
     # --- CONFIGURATION LOCALE AUTOMATIQUE ---
@@ -111,7 +111,7 @@ if __name__ == "__main__":
         exit()
 
     selected_pdf = pdf_files[0]
-    # Extraction du département (ex: 79 ou 86)
+    # Extraction du département
     dept_match = re.search(r'(\d{2})', selected_pdf.name)
     DEPARTEMENT = dept_match.group(1) if dept_match else "Inconnu"
     
@@ -130,4 +130,5 @@ if __name__ == "__main__":
     except Exception as e:
         logger.error(f"Erreur critique : {e}")
         import traceback
+
         traceback.print_exc()
