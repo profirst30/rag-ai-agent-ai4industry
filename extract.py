@@ -10,12 +10,11 @@ from docling_core.types.doc import DocItemLabel
 
 
 def extract_pdf(pdf_path, json_path):
-    """Extrait un PDF en JSON structuré"""
+    """Extrait un PDF en JSON structure"""
 
     print(f"  Lecture du PDF : {os.path.basename(pdf_path)}")
 
     # Config Docling
-    print(f"    Configuration Docling (OCR: OFF, Tableaux: ON)")
     pipeline = PdfPipelineOptions()
     pipeline.do_ocr = False
     pipeline.do_table_structure = True
@@ -26,12 +25,12 @@ def extract_pdf(pdf_path, json_path):
     )
 
     # Conversion
-    print(f"   Conversion en cours...")
+    print(f"  Conversion en cours...")
     doc = converter.convert(pdf_path).document
-    print(f"  ✓ PDF converti")
+    print(f"  PDF converti")
 
     # Structure arborescente
-    print(f"  ️  Construction de l'arborescence...")
+    print(f"  Construction de l'arborescence...")
     root = {"titre": "root", "niveau": 0, "contenu": [], "sous_sections": []}
     stack = [root]
 
@@ -80,12 +79,12 @@ def extract_pdf(pdf_path, json_path):
                 nb_textes += 1
                 stack[-1]["contenu"].append({"type": "texte", "valeur": text})
 
-    print(f"   Extrait : {nb_titres} titres, {nb_tableaux} tableaux, {nb_textes} paragraphes")
+    print(f"  Extrait : {nb_titres} titres, {nb_tableaux} tableaux, {nb_textes} paragraphes")
 
     # Sauvegarde
-    print(f"   Sauvegarde JSON...")
+    print(f"  Sauvegarde JSON...")
     os.makedirs(os.path.dirname(json_path), exist_ok=True)
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(root, f, ensure_ascii=False, indent=2)
 
-    print(f"   Extrait : {pdf_path} → {json_path}")
+    print(f"  OK : {os.path.basename(json_path)}")

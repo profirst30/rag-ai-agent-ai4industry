@@ -1,35 +1,42 @@
 """
-Moteur de requête
+Moteur de requete
 """
 import json
 from difflib import get_close_matches
 
 
-# Mapping risques/synonymes
 RISQUES = {
-    "inondation": ["inondation", "crue", "submersion", "débordement"],
-    "mouvement de terrain": ["mouvement de terrain", "effondrement", "argile", "cavités"],
-    "séisme": ["séisme", "sismique", "tremblement"],
-    "feu": ["feu", "incendie", "forêt", "flammes"],
-    "tempête": ["tempête", "vent", "cyclone"],
+    "inondation": ["inondation", "crue", "submersion"],
+    "mouvement de terrain": ["mouvement de terrain", "effondrement"],
+    "séisme": ["séisme", "sismique"],
+    "feu": ["feu", "incendie", "forêt"],
+    "tempête": ["tempête", "vent"],
     "radon": ["radon"],
-    "industriel": ["industriel", "seveso", "usine"],
-    "nucléaire": ["nucléaire", "radioactif", "centrale"],
-    "barrage": ["barrage", "digue"],
-    "transport": ["transport", "matières dangereuses"]
+    "industriel": ["industriel", "seveso"],
+    "nucléaire": ["nucléaire", "radioactif"],
+    "barrage": ["barrage"],
+    "transport": ["transport", "matières"]
 }
 
 
-def query(index_path, risque, ville=None):
-    """Génère un prompt"""
+def generer_prompt(index_path, risque, ville=None):
+    """
+    Fonction principale : genere un prompt depuis l'index
 
-    # Chargement index
+    Args:
+        index_path: Chemin vers l'index JSON
+        risque: Type de risque (str)
+        ville: Nom de la ville optionnel (str)
+
+    Returns:
+        Le prompt genere (str)
+    """
     with open(index_path, "r", encoding="utf-8") as f:
         db = json.load(f)
 
     villes = [k for k in db.keys() if k != "_GLOBAL_"]
 
-    # Trouver la ville si fournie
+    # Trouver la ville
     ville_trouvee = None
     if ville:
         if ville in villes:
@@ -39,7 +46,7 @@ def query(index_path, risque, ville=None):
             if matches:
                 ville_trouvee = matches[0]
             else:
-                return f"❌ Ville introuvable : {ville}"
+                return f"Ville introuvable : {ville}"
 
     # Identifier le risque
     risque_key = None
@@ -51,7 +58,7 @@ def query(index_path, risque, ville=None):
     if not risque_key:
         risque_key = risque_lower
 
-    # Données locales
+    # Donnees locales
     local = []
     if ville_trouvee and ville_trouvee in db:
         for ref in db[ville_trouvee]["refs"]:
@@ -67,13 +74,12 @@ def query(index_path, risque, ville=None):
             if match:
                 local.append(f"--- {ref['section']} ---\n{ref['texte']}")
 
-    # Consignes globales filtrées
+    # Consignes globales
     global_consignes = []
     if "_GLOBAL_" in db:
         for ref in db["_GLOBAL_"]["refs"]:
             full = (ref['section'] + " " + ref['texte']).lower()
 
-            # Contient le bon risque ?
             bon_risque = False
             if risque_key in RISQUES:
                 for syn in RISQUES[risque_key]:
@@ -81,7 +87,6 @@ def query(index_path, risque, ville=None):
                         bon_risque = True
                         break
 
-            # Contient un autre risque ?
             autre_risque = False
             for r, syns in RISQUES.items():
                 if r != risque_key:
@@ -90,30 +95,29 @@ def query(index_path, risque, ville=None):
                             autre_risque = True
                             break
 
-            # Garder si pertinent ou neutre
             if bon_risque or not autre_risque:
                 global_consignes.append(f"--- {ref['section']} ---\n{ref['texte']}")
 
-    # Assemblage prompt
+    # Assemblage
     if ville_trouvee:
         if not local:
-            return f"❌ Pas de données pour {ville_trouvee} / {risque}"
+            return f"Pas de donnees pour {ville_trouvee} / {risque}"
 
-        prompt = f"""RÔLE : Expert Sécurité Civile.
-SUJET : {risque} à {ville_trouvee}.
+        prompt = f"""ROLE : Expert Securite Civile.
+SUJET : {risque} a {ville_trouvee}.
 
-[DONNÉES LOCALES]
+[DONNEES LOCALES]
 {chr(10).join(local)}
 
 [CONSIGNES]
 {chr(10).join(global_consignes)}
 
-CONSIGNE : Rédige le DICRIM."""
+CONSIGNE : Redige le DICRIM."""
     else:
         if not global_consignes:
-            return f"❌ Pas de consignes pour {risque}"
+            return f"Pas de consignes pour {risque}"
 
-        prompt = f"""RÔLE : Expert Sécurité Civile.
+        prompt = f"""ROLE : Expert Securite Civile.
 SUJET : {risque}.
 
 [CONSIGNES]
@@ -122,3 +126,7 @@ SUJET : {risque}.
 CONSIGNE : Explique les consignes."""
 
     return prompt
+
+
+# Alias pour compatibilite
+query = generer_prompt
