@@ -10,7 +10,7 @@ https://github.com/MAIF/otoroshi/releases
 ``` bash
 https://github.com/cloud-apim/otoroshi-llm-extension/releases
 ```
-
+Ajouter la .jar a la racine du projet puis lancer. 
 ### Lancer 
 #### Pour windows 
 ```bash
