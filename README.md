@@ -1,59 +1,78 @@
-# Projet GROUPE 3 
+# LiteLLM + Ollama Tool-Calling Agent (Branch: hiba)
 
-Cette version utilise otoroshi avec le systeme de tool et des json générer sans Embedding. 
-Les json sont mis directement dans la definition du tool (méthode directe utilisée par manque de temps dans le cas ou une piste plus élaboré ne fonctionner pas cf. branch nobel_version).
+## Overview
+This branch contains my final implementation of a local AI agent using **Ollama** with **LiteLLM** as an OpenAI-compatible proxy, focusing on **tool-calling** instead of manual routing logic.
 
-### Télécharger 
+No paid OpenAI API is used.
 
-#### Otoroshi
-``` bash
-https://github.com/MAIF/otoroshi/releases
+---
+
+## Files
+- `mainn.ipynb`  
+  Main notebook containing the agent logic, tool definition, and execution flow.
+
+- `litellm_config.yaml`  
+  LiteLLM configuration mapping the local Ollama model.
+
+- `README.md`  
+  Project documentation.
+
+---
+
+## Architecture
 ```
-#### LLM Extension :
-``` bash
-https://github.com/cloud-apim/otoroshi-llm-extension/releases
+User Query
+   ↓
+Agent (OpenAI-compatible client)
+   ↓
+Tool Call (retrieve_from_index)
+   ↓
+Local Resources / Index
+   ↓
+Tool Output
+   ↓
+Final Answer
 ```
-Ajouter la .jar a la racine du projet puis lancer. 
-### Lancer 
 
-Renommer les .jar sans les versions 
-nom des jar : 
-- otoroshi.jar
-- 
-#### Pour windows 
+---
+
+## Tech Stack
+- Ollama (local LLM runtime)
+- LiteLLM (OpenAI-compatible proxy)
+- OpenAI Python SDK
+- Jupyter Notebook
+
+---
+
+## Setup
+
+### 1. Start Ollama
 ```bash
-java -cp "otoroshi-llm-extension.jar;otoroshi.jar" -Dotoroshi.adminLogin=admin -Dotoroshi.adminPassword=password -Dotoroshi.storage=file play.core.server.ProdServerStart
+ollama serve
 ```
 
-#### Pour Linux : 
+### 2. Start LiteLLM
 ```bash
-java -cp "otoroshi-llm-extension.jar:otoroshi.jar" -Dotoroshi.adminLogin=admin -Dotoroshi.adminPassword=password -Dotoroshi.storage=file play.core.server.ProdServerStart
+python -m litellm --config litellm_config.yaml --port 4000
 ```
 
-### Lancer l'interface pour tester 
-```bash
-python -m http.server 9000
+### 3. Run the Notebook
+Open and execute:
+```
+mainn.ipynb
 ```
 
-### Lien
-#### Interface de chat bot 
-http://ai4industry.oto.tools:8080/chat
+Ensure the client configuration uses:
+```python
+base_url = "http://localhost:4000/v1"
+MODEL = "<model_name_from_litellm_config>"
+```
 
-### Interface admin 
-http://otoroshi.oto.tools:8080
+---
 
-### Instruction 
+## Tool
+### `retrieve_from_index`
+- Retrieves information from local indexed resources
+- Includes a safety kill-switch to avoid hallucinations when no data is found
 
-Pour les models j'utilise GROQ qui donne des tokens gratuit sur plusieurs models.
-Pour faire ça : 
-1. Aller dans LLM provider depuis l'interface admin
-2. cliquer sur OpenAI provider (le seul normalement)
-3. Inscrivez-vous sur groq puis créer une clé API https://console.groq.com/keys
-4. Changer la clé dans API Token 
-5. Selectionner un model (j'ai testé openai/gtp-oss-120b et 20b qui marche assez bien) mais faites attentions tous les models ne peuvent pas utiliser les tools donc si ça marche pas essayer un autre.
-
-
-#### Utilsation 
-Le chat est fait pour répondre à des questions uniquement en rapport avec les DDRM qu'il possède. (departement 73,79,86)
-
-
+---
